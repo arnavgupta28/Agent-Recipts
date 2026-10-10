@@ -33,11 +33,18 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(
     vscode.workspace.registerTextDocumentContentProvider(SCHEME, { provideTextDocumentContent: snapshotContent }),
     vscode.commands.registerCommand("agentReceipts.open", () => openPanel(true)),
+    vscode.commands.registerCommand("agentReceipts.welcome", openWalkthrough),
     vscode.commands.registerCommand("agentReceipts.installHooks", installHooks),
     vscode.commands.registerCommand("agentReceipts.trustHooks", trustHooks),
     vscode.commands.registerCommand("agentReceipts.pickSession", pickSession),
     vscode.commands.registerCommand("agentReceipts.demo", runDemo),
   );
+
+  // First run: show the Getting Started walkthrough once.
+  if (!context.globalState.get<boolean>("agentReceipts.welcomed")) {
+    void context.globalState.update("agentReceipts.welcomed", true);
+    setTimeout(() => void openWalkthrough(), 1500);
+  }
 
   // Poll for new events. Cheap (a readdir per repo) and robust across .git watcher excludes.
   const timer = setInterval(() => void tick(), 1000);
@@ -46,6 +53,10 @@ export function activate(context: vscode.ExtensionContext): void {
 }
 
 export function deactivate(): void {}
+
+async function openWalkthrough(): Promise<void> {
+  await vscode.commands.executeCommand("workbench.action.openWalkthrough", `${ctx.extension.id}#agentReceipts.start`, false);
+}
 
 // ---------- repos & sessions ----------
 function workspaceRepos(): RepoInfo[] {

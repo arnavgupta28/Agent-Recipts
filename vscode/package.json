@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/arnavgupta28/agent-receipts"
+    "url": "https://github.com/arnavgupta28/Agent-Recipts"
   },
   "engines": {
     "vscode": "^1.100.0"
@@ -30,6 +30,12 @@
   ],
   "contributes": {
     "commands": [
+      {
+        "command": "agentReceipts.welcome",
+        "title": "Get Started",
+        "category": "Agent Receipts",
+        "icon": "$(book)"
+      },
       {
         "command": "agentReceipts.open",
         "title": "Open Run Graph",
@@ -71,11 +77,107 @@
           "description": "Pause between steps in the live demo."
         }
       }
-    }
+    },
+    "walkthroughs": [
+      {
+        "id": "agentReceipts.start",
+        "title": "Get started with Agent Receipts",
+        "description": "See what your Codex agents did, step by step and agent by agent, and rewind your files to any step.",
+        "steps": [
+          {
+            "id": "demo",
+            "title": "Watch a live run (no Codex needed)",
+            "description": "Replay a recorded 3-agent Codex run into a demo folder. The run graph opens beside your editor and grows step by step.\n[Run Live Demo](command:agentReceipts.demo)",
+            "media": {
+              "image": "media/guide/1-live.jpg",
+              "altText": "The run graph growing live while agents work"
+            },
+            "completionEvents": [
+              "onCommand:agentReceipts.demo"
+            ]
+          },
+          {
+            "id": "graph",
+            "title": "Read the run graph",
+            "description": "Each agent gets a lane and a character: **Nova** \u2b50 is the main agent, **Pip** \ud83e\ude90 and **Comet** \u2604\ufe0f are subagents. Filled orbs are file edits, glass orbs are commands, red orbs failed, and a pulsing orb is running right now. The banner names the steps that changed since tests last passed.\n[Open Run Graph](command:agentReceipts.open)",
+            "media": {
+              "image": "media/guide/2-graph.jpg",
+              "altText": "Finished run with a failed test and the cause highlighted"
+            },
+            "completionEvents": [
+              "onCommand:agentReceipts.open"
+            ]
+          },
+          {
+            "id": "step",
+            "title": "Click any node to see what ran",
+            "description": "Click a node in the graph, or a row in the timeline, to see the exact command, its full output and which agent ran it.",
+            "media": {
+              "image": "media/guide/3-step.jpg",
+              "altText": "Step details showing the failing test output"
+            }
+          },
+          {
+            "id": "diff",
+            "title": "Drill down to the exact diff",
+            "description": "Go from **modules \u2192 files \u2192 the code**. Each tab is a step that touched the file. Use **Open diff in editor** for VS Code's own side-by-side diff, or click an agent's lane to see only its work.",
+            "media": {
+              "image": "media/guide/4-diff.jpg",
+              "altText": "The diff of the step that introduced the bug"
+            }
+          },
+          {
+            "id": "rewind",
+            "title": "Rewind, and undo",
+            "description": "Click **Rewind to after #N** to put every file back exactly as it was after that step. A safety snapshot is taken first, so **Undo last rewind** always works. Your HEAD, branch, index and ignored files are never touched.",
+            "media": {
+              "image": "media/guide/5-rewind-confirm.jpg",
+              "altText": "Confirm dialog before rewinding files"
+            }
+          },
+          {
+            "id": "setup",
+            "title": "Record your own Codex runs",
+            "description": "Write the recording hooks, either for this repo only or for every repo on this machine. Existing hooks are kept.\n[Set Up Recording](command:agentReceipts.installHooks)",
+            "media": {
+              "image": "media/guide/7-setup.png",
+              "altText": "Command palette with the two install choices"
+            },
+            "completionEvents": [
+              "onCommand:agentReceipts.installHooks"
+            ]
+          },
+          {
+            "id": "trust",
+            "title": "Trust the hooks in Codex",
+            "description": "Codex only runs hooks you have reviewed. This opens Codex in a terminal: type **/hooks** and trust the Agent Receipts hooks.\n[Review & Trust Hooks](command:agentReceipts.trustHooks)",
+            "media": {
+              "image": "media/guide/8-trust.png",
+              "altText": "Codex terminal reviewing hooks"
+            },
+            "completionEvents": [
+              "onCommand:agentReceipts.trustHooks"
+            ]
+          },
+          {
+            "id": "codex",
+            "title": "Chat with Codex and watch it live",
+            "description": "Start a **new** Codex chat in this repo. The run graph opens on its own when Codex starts working, and the status bar shows what it is doing right now. Click the status bar item to bring the panel back.\n[Open Codex](command:chatgpt.openSidebar)",
+            "media": {
+              "image": "media/guide/9-codex.jpg",
+              "altText": "Codex chat on the left, live run graph on the right"
+            },
+            "completionEvents": [
+              "onCommand:chatgpt.openSidebar"
+            ]
+          }
+        ]
+      }
+    ]
   },
   "scripts": {
     "build": "node ./build.mjs",
-    "package": "node ./build.mjs && vsce package --no-dependencies --allow-missing-repository --skip-license -o agent-receipts.vsix"
+    "package": "node ./build.mjs && vsce package --no-dependencies --skip-license --baseImagesUrl https://raw.githubusercontent.com/arnavgupta28/Agent-Recipts/main/vscode/ -o agent-receipts.vsix"
   },
   "galleryBanner": {
     "color": "#0a0c19",

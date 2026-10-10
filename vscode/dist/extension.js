@@ -788,16 +788,24 @@ function activate(context) {
   context.subscriptions.push(
     vscode.workspace.registerTextDocumentContentProvider(SCHEME, { provideTextDocumentContent: snapshotContent }),
     vscode.commands.registerCommand("agentReceipts.open", () => openPanel(true)),
+    vscode.commands.registerCommand("agentReceipts.welcome", openWalkthrough),
     vscode.commands.registerCommand("agentReceipts.installHooks", installHooks),
     vscode.commands.registerCommand("agentReceipts.trustHooks", trustHooks),
     vscode.commands.registerCommand("agentReceipts.pickSession", pickSession),
     vscode.commands.registerCommand("agentReceipts.demo", runDemo)
   );
+  if (!context.globalState.get("agentReceipts.welcomed")) {
+    void context.globalState.update("agentReceipts.welcomed", true);
+    setTimeout(() => void openWalkthrough(), 1500);
+  }
   const timer = setInterval(() => void tick(), 1e3);
   context.subscriptions.push({ dispose: () => clearInterval(timer) });
   void tick();
 }
 function deactivate() {
+}
+async function openWalkthrough() {
+  await vscode.commands.executeCommand("workbench.action.openWalkthrough", `${ctx.extension.id}#agentReceipts.start`, false);
 }
 function workspaceRepos() {
   const seen = /* @__PURE__ */ new Map();
