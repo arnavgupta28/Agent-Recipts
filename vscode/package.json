@@ -1,0 +1,79 @@
+{
+  "name": "agent-receipts",
+  "displayName": "Agent Receipts for Codex",
+  "description": "Live run graph, audit trail and one-click rewind for Codex agent runs, right beside the Codex chat.",
+  "version": "0.1.0",
+  "publisher": "agent-receipts",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/arnavgupta28/agent-receipts"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "codex",
+    "agents",
+    "audit",
+    "rewind",
+    "openai"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "agentReceipts.open",
+        "title": "Open Run Graph",
+        "category": "Agent Receipts",
+        "icon": "$(history)"
+      },
+      {
+        "command": "agentReceipts.pickSession",
+        "title": "Choose Agent Run\u2026",
+        "category": "Agent Receipts"
+      },
+      {
+        "command": "agentReceipts.installHooks",
+        "title": "Set Up Recording for Codex",
+        "category": "Agent Receipts"
+      },
+      {
+        "command": "agentReceipts.trustHooks",
+        "title": "Review & Trust Codex Hooks",
+        "category": "Agent Receipts"
+      },
+      {
+        "command": "agentReceipts.demo",
+        "title": "Run Live Demo",
+        "category": "Agent Receipts"
+      }
+    ],
+    "configuration": {
+      "title": "Agent Receipts",
+      "properties": {
+        "agentReceipts.autoOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open the run graph beside the editor when a new Codex run starts."
+        },
+        "agentReceipts.demoDelayMs": {
+          "type": "number",
+          "default": 1500,
+          "description": "Pause between steps in the live demo."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "build": "node ./build.mjs",
+    "package": "node ./build.mjs && vsce package --no-dependencies --allow-missing-repository --skip-license -o agent-receipts.vsix"
+  }
+}

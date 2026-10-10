@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "agent-receipts": {
+      "command": "node",
+      "args": ["./dist/server.js"],
+      "cwd": "."
+    }
+  }
+}

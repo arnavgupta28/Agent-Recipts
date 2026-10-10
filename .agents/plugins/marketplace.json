@@ -1,0 +1,12 @@
+{
+  "name": "agent-receipts-local",
+  "interface": { "displayName": "Agent Receipts (local)" },
+  "plugins": [
+    {
+      "name": "agent-receipts",
+      "source": { "source": "local", "path": "./" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Developer Tools"
+    }
+  ]
+}
