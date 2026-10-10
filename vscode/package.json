@@ -23,6 +23,7 @@
     "rewind",
     "openai"
   ],
+  "icon": "media/icon.png",
   "main": "./dist/extension.js",
   "activationEvents": [
     "onStartupFinished"
@@ -75,5 +76,9 @@
   "scripts": {
     "build": "node ./build.mjs",
     "package": "node ./build.mjs && vsce package --no-dependencies --allow-missing-repository --skip-license -o agent-receipts.vsix"
+  },
+  "galleryBanner": {
+    "color": "#0a0c19",
+    "theme": "dark"
   }
 }
