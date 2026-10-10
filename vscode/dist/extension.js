@@ -1055,12 +1055,27 @@ function bundledCodex() {
   const p = (0, import_node_path7.join)(ext.extensionPath, "bin", `${os}-${arch}`, process.platform === "win32" ? "codex.exe" : "codex");
   return (0, import_node_fs5.existsSync)(p) ? p : null;
 }
+function standaloneCodex() {
+  try {
+    const p = (0, import_node_child_process3.execFileSync)(process.env.SHELL || "/bin/zsh", ["-lc", "command -v codex"], { encoding: "utf8", timeout: 5e3 }).trim();
+    return p && (0, import_node_fs5.existsSync)(p) ? p : null;
+  } catch {
+    return null;
+  }
+}
 async function trustHooks() {
-  const codex = bundledCodex() ?? "codex";
+  const standalone = standaloneCodex();
+  const bundled = bundledCodex();
+  const command = standalone ? `"${standalone}"` : bundled ? `"${bundled}" --no-daemon` : null;
+  if (!command) {
+    const pick = await vscode.window.showErrorMessage("Codex CLI not found. Install it, then run this command again.", "Copy install command");
+    if (pick) await vscode.env.clipboard.writeText("npm install -g @openai/codex");
+    return;
+  }
   const cwd = workspaceRepos()[0]?.root ?? (0, import_node_os2.tmpdir)();
   const term = vscode.window.createTerminal({ name: "Codex \xB7 review hooks", cwd });
   term.show();
-  term.sendText(`"${codex}"`);
+  term.sendText(command);
   void vscode.window.showInformationMessage("In the Codex terminal, type /hooks, review the Agent Receipts hooks and trust them. Then start a new Codex chat.");
 }
 async function runDemo() {

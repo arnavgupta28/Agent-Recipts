@@ -345,12 +345,31 @@ function bundledCodex(): string | null {
   return existsSync(p) ? p : null;
 }
 
+/** The standalone Codex CLI on the user's PATH, if installed. */
+function standaloneCodex(): string | null {
+  try {
+    const p = execFileSync(process.env.SHELL || "/bin/zsh", ["-lc", "command -v codex"], { encoding: "utf8", timeout: 5000 }).trim();
+    return p && existsSync(p) ? p : null;
+  } catch {
+    return null;
+  }
+}
+
 async function trustHooks(): Promise<void> {
-  const codex = bundledCodex() ?? "codex";
+  // The binary bundled in the Codex extension is not a complete CLI package and fails
+  // without --no-daemon, so prefer a standalone install when there is one.
+  const standalone = standaloneCodex();
+  const bundled = bundledCodex();
+  const command = standalone ? `"${standalone}"` : bundled ? `"${bundled}" --no-daemon` : null;
+  if (!command) {
+    const pick = await vscode.window.showErrorMessage("Codex CLI not found. Install it, then run this command again.", "Copy install command");
+    if (pick) await vscode.env.clipboard.writeText("npm install -g @openai/codex");
+    return;
+  }
   const cwd = workspaceRepos()[0]?.root ?? tmpdir();
   const term = vscode.window.createTerminal({ name: "Codex · review hooks", cwd });
   term.show();
-  term.sendText(`"${codex}"`);
+  term.sendText(command);
   void vscode.window.showInformationMessage("In the Codex terminal, type /hooks, review the Agent Receipts hooks and trust them. Then start a new Codex chat.");
 }
 
