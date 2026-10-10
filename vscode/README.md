@@ -74,7 +74,7 @@ Any hooks you already have are kept.
 
 ![Codex terminal reviewing hooks](media/guide/8-trust.png)
 
-Run **Agent Receipts: Review & Trust Codex Hooks**. A terminal opens with the Codex engine bundled in the Codex extension. Type **`/hooks`** and trust the Agent Receipts hooks. Codex never runs hooks you haven't approved.
+Run **Agent Receipts: Review & Trust Codex Hooks**. A terminal opens with Codex. It uses the Codex CLI on your PATH if you have one, and otherwise the copy bundled with the Codex extension. Type **`/hooks`** and trust the Agent Receipts hooks. Codex never runs hooks you haven't approved.
 
 ### Step 3: chat with Codex and watch it live
 
